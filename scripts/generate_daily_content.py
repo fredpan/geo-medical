@@ -4,6 +4,7 @@ from datetime import date
 from pathlib import Path
 import openai
 import matplotlib.pyplot as plt
+import re
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -54,9 +55,14 @@ def audit_with_gpt(text, topic):
         temperature=0
     )
     content = response.choices[0].message["content"]
-    json_start = content.find("{")
-    json_data = json.loads(content[json_start:])
-    return json_data
+
+    matches = re.findall(r'{[\s\S]*?}', content)
+    for m in matches:
+        try:
+            return json.loads(m)
+        except:
+            continue
+    raise ValueError("No valid JSON returned from GPT.")
 
 def extract_mermaid_from_article(article_text):
     prompt = (
@@ -65,19 +71,22 @@ def extract_mermaid_from_article(article_text):
     "文章如下：\\n\"\"\"\\n{article}\\n\"\"\"\\n\\n"
     "只输出 mermaid 代码段（不要自然语言），使用 graph TD。"
 ).format(article=article_text)
-    res = openai.ChatCompletion.create(
-        model="gpt-4o",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.3
-    )
-    content = res.choices[0].message["content"]
-    return content.strip()
+
+    try:
+        res = openai.ChatCompletion.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3
+        )
+        content = res.choices[0].message["content"]
+        return content.strip()
+    except Exception as e:
+        return f"graph TD\nA[生成失败：{e}]"
 
 def generate_cover_image_prompt(title_zh):
     return f"请生成一张符合医学风格的封面插图，主题是：{title_zh}，要求为简约风格图解，例如病变机制、细胞结构、治疗路径等。"
 
 def generate_medical_chart(slug, topic):
-    # 示例数据：可根据 GPT 输出的 JSON 动态替换
     labels = ['手术', '化疗', '放疗', '靶向']
     sizes = [30, 25, 20, 25]
     colors = ['#ff9999','#66b3ff','#99ff99','#ffcc99']

@@ -59,18 +59,12 @@ def audit_with_gpt(text, topic):
     return json_data
 
 def extract_mermaid_from_article(article_text):
-    prompt = f"""
-你是一位医学结构信息分析助手。
-
-请从下列中文医学文章中提取出疾病的结构流程（病因、症状、治疗）并输出 Mermaid 格式流程图。
-
-文章如下：
-"""
-{article_text}
-"""
-
-只输出 mermaid 代码段（不要自然语言），使用 graph TD。
-"""
+    prompt = (
+    "你是一位医学结构信息分析助手。\\n\\n"
+    "请从下列中文医学文章中提取出疾病的结构流程（病因、症状、治疗）并输出 Mermaid 格式流程图。\\n\\n"
+    "文章如下：\\n\"\"\"\\n{article}\\n\"\"\"\\n\\n"
+    "只输出 mermaid 代码段（不要自然语言），使用 graph TD。"
+).format(article=article_text)
     res = openai.ChatCompletion.create(
         model="gpt-4o",
         messages=[{"role": "user", "content": prompt}],

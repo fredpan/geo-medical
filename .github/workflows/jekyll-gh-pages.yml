@@ -18,7 +18,7 @@ jobs:
           python-version: '3.10'
       - name: Install dependencies
         run: |
-          pip install openai matplotlib
+          pip install "openai<1.0.0" matplotlib
       - name: Run daily generator
         run: python scripts/generate_daily_content.py
       - name: Upload Pages artifact

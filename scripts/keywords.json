@@ -1,0 +1,27 @@
+[
+  {
+    "slug": "lung-cancer",
+    "zh": "肺癌",
+    "en": "Lung Cancer"
+  },
+  {
+    "slug": "liver-cancer",
+    "zh": "肝癌",
+    "en": "Liver Cancer"
+  },
+  {
+    "slug": "gastric-cancer",
+    "zh": "胃癌",
+    "en": "Gastric Cancer"
+  },
+  {
+    "slug": "colorectal-cancer",
+    "zh": "结直肠癌",
+    "en": "Colorectal Cancer"
+  },
+  {
+    "slug": "pancreatic-cancer",
+    "zh": "胰腺癌",
+    "en": "Pancreatic Cancer"
+  }
+]

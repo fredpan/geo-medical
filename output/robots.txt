@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /geo/
+Disallow: /readable/
+Disallow: /wx/
+Disallow: /pdf/
+Disallow: /charts/
+Disallow: /audit/
+Sitemap: https://fredpan.github.io/geo-medical/sitemap.xml

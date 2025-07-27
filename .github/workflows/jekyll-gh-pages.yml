@@ -1,0 +1,27 @@
+name: Daily GEO Generation and Deploy
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          pip install openai
+      - name: Run daily generator
+        run: python scripts/generate_daily_content.py
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: output/
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
